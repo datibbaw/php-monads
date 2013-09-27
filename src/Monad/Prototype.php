@@ -8,13 +8,13 @@
 
 namespace Monad;
 
-class Prototype
+class prototype
 {
     private $inherited;
 
     private $instance;
 
-    public function __construct(Prototype $prototype = null)
+    public function __construct(prototype $prototype = null)
     {
         $this->inherited = $prototype;
         $this->instance = [];
@@ -40,18 +40,14 @@ class Prototype
 
     public function __call($name, $arguments)
     {
-        if (!isset($this->instance[$name])) {
-            if (!isset($this->inherited) || !($fromPrototype = $this->inherited->$name) instanceof \Closure) {
-                return; // or better, blow up
-            }
-
-            $this->instance[$name] = $fromPrototype->bindTo($this);
+        if (!isset($this->instance[$name]) && isset($this->inherited) && ($fromProto = $this->inherited->$name) instanceof \Closure) {
+            $target = $fromProto->bindTo($this);
+        } else if (isset($this->instance[$name]) && $this->instance[$name] instanceof \Closure) {
+            $target = $this->instance[$name];
+        } else {
+            return;
         }
 
-        if (!($this->instance[$name] instanceof \Closure)) {
-            return; // or better, blow up
-        }
-
-        return call_user_func_array($this->instance[$name], $arguments);
+        return call_user_func_array($target, $arguments);
     }
 }
