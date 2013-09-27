@@ -8,11 +8,9 @@ use Monad\Unit;
  * Time: 6:07 PM
  */
 
-require 'PHPUnit.php';
-
-require 'src/Monad/Prototype.php';
-require 'src/Monad/Monad.php';
-require 'src/Monad/Unit.php';
+require dirname(__DIR__) . '/src/Monad/Prototype.php';
+require dirname(__DIR__) . '/src/Monad/Monad.php';
+require dirname(__DIR__) . '/src/Monad/Unit.php';
 
 function alert($value)
 {
