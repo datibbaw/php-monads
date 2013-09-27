@@ -14,7 +14,7 @@ class Prototype
 
     private $instance;
 
-    public function __construct(prototype $prototype = null)
+    public function __construct(Prototype $prototype = null)
     {
         $this->inherited = $prototype;
         $this->instance = [];
@@ -22,6 +22,10 @@ class Prototype
 
     public function __set($name, $value)
     {
+        if ($value instanceof \Closure) {
+            $value = $value->bindTo($this);
+        }
+
         $this->instance[$name] = $value;
     }
 
@@ -36,6 +40,18 @@ class Prototype
 
     public function __call($name, $arguments)
     {
-        return call_user_func_array($this->$name->bindTo($this), $arguments);
+        if (!isset($this->instance[$name])) {
+            if (!isset($this->inherited) || !($fromPrototype = $this->inherited->$name) instanceof \Closure) {
+                return; // or better, blow up
+            }
+
+            $this->instance[$name] = $fromPrototype->bindTo($this);
+        }
+
+        if (!($this->instance[$name] instanceof \Closure)) {
+            return; // or better, blow up
+        }
+
+        return call_user_func_array($this->instance[$name], $arguments);
     }
 }
