@@ -8,8 +8,6 @@ use Monad\Unit;
  * Time: 6:07 PM
  */
 
-require 'PHPUnit.php';
-
 require 'src/Monad/Prototype.php';
 require 'src/Monad/Monad.php';
 require 'src/Monad/Unit.php';
