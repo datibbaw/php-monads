@@ -8,9 +8,9 @@ use Monad\Unit;
  * Time: 6:07 PM
  */
 
-require 'src/Monad/Prototype.php';
-require 'src/Monad/Monad.php';
-require 'src/Monad/Unit.php';
+require '../src/Monad/Prototype.php';
+require '../src/Monad/Monad.php';
+require '../src/Monad/Unit.php';
 
 function alert($value)
 {
